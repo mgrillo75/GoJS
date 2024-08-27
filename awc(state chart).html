@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
+<meta name="description" content="A state chart showing the key success factors for Target Account Managers at AWC"/>
+<link rel="stylesheet" href="../assets/css/style.css"/>
+<script src="../release/go.js"></script>
+
+<script id="code">
+function init() {
+  const $ = go.GraphObject.make;
+
+  myDiagram = new go.Diagram("myDiagramDiv", {
+    "undoManager.isEnabled": true,
+    layout: $(go.LayeredDigraphLayout, {
+      direction: 90,
+      layerSpacing: 50,
+      columnSpacing: 30,
+      setsPortSpots: false
+    })
+  });
+
+  myDiagram.nodeTemplate =
+    $(go.Node, "Auto",
+      $(go.Shape, "RoundedRectangle",
+        { fill: "white", strokeWidth: 2 },
+        new go.Binding("fill", "color"),
+        new go.Binding("stroke", "color")),
+      $(go.TextBlock,
+        { margin: 8, maxSize: new go.Size(160, NaN), wrap: go.TextBlock.WrapFit, textAlign: "center" },
+        new go.Binding("text", "text"))
+    );
+
+  myDiagram.linkTemplate =
+    $(go.Link,
+      { routing: go.Link.AvoidsNodes, corner: 5 },
+      $(go.Shape, { strokeWidth: 2 }),
+      $(go.Shape, { toArrow: "Standard", stroke: null }),
+      $(go.Panel, "Auto",
+        $(go.Shape, "RoundedRectangle", { fill: "#E3F2FD", stroke: null }), // Updated background color
+        $(go.TextBlock, { margin: 3, stroke: "#1565C0" }, // Updated text color
+          new go.Binding("text", "text"))
+      )
+    );
+
+  var nodeDataArray = [
+    { key: 1, text: "TAM Success\nFactors", color: "#4CAF50" },
+    { key: 2, text: "Miguel/Adam\nTraits", color: "#2196F3" },
+    { key: 3, text: "AWC\nContributions", color: "#FFC107" },
+    { key: 4, text: "Customer-Centric\nStrategies", color: "#9C27B0" },
+    { key: 5, text: "Technology Partner\nEngagement", color: "#FF5722" },
+    { key: 6, text: "Personable and\nApproachable", color: "#2196F3" },
+    { key: 7, text: "Genuine Concern\nfor Success", color: "#2196F3" },
+    { key: 8, text: "Technical\nExpertise", color: "#2196F3" },
+    { key: 9, text: "Rebate\nManagement", color: "#FFC107" },
+    { key: 10, text: "Margin\nMaximization", color: "#FFC107" },
+    { key: 11, text: "Sales\nGrowth", color: "#FFC107" },
+    { key: 12, text: "Product-Application\nFit", color: "#9C27B0" },
+    { key: 13, text: "Technical Support\nCapabilities", color: "#9C27B0" },
+    { key: 14, text: "Strategic Team\nInvolvement", color: "#9C27B0" },
+    { key: 15, text: "Product\nAdvocacy", color: "#FF5722" },
+    { key: 16, text: "Joint Customer\nVisits", color: "#FF5722" },
+    { key: 17, text: "Collaborative\nSolution Development", color: "#FF5722" }
+  ];
+
+  var linkDataArray = [
+    { from: 1, to: 2, text: "Develop" },
+    { from: 1, to: 3, text: "Leverage" },
+    { from: 1, to: 4, text: "Implement" },
+    { from: 1, to: 5, text: "Foster" },
+    { from: 2, to: 6, text: "Be" },
+    { from: 2, to: 7, text: "Show" },
+    { from: 2, to: 8, text: "Demonstrate" },
+    { from: 3, to: 9, text: "Manage" },
+    { from: 3, to: 10, text: "Optimize" },
+    { from: 3, to: 11, text: "Drive" },
+    { from: 4, to: 12, text: "Ensure" },
+    { from: 4, to: 13, text: "Provide" },
+    { from: 4, to: 14, text: "Utilize" },
+    { from: 5, to: 15, text: "Promote" },
+    { from: 5, to: 16, text: "Coordinate" },
+    { from: 5, to: 17, text: "Develop" }
+  ];
+
+  myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</head>
+<body>
+<div id="sample">
+  <div id="myDiagramDiv" style="background-color: white; border: solid 1px black; width: 100%; height: 800px"></div>
+  <p>This state chart shows the key success factors for Target Account Managers (TAMs) at AWC, based on Miguel and Adam's experiences.</p>
+</div>
+</body>
+</html>

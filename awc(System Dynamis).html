@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
+<meta name="description" content="A System Dynamics diagram showing the key success factors for Target Account Managers at AWC"/>
+<link rel="stylesheet" href="../assets/css/style.css"/>
+<script src="../release/go.js"></script>
+
+<script id="code">
+function init() {
+  const $ = go.GraphObject.make;
+
+  myDiagram = new go.Diagram("myDiagramDiv", {
+    "undoManager.isEnabled": true,
+    "toolManager.mouseWheelBehavior": go.ToolManager.WheelZoom,
+    layout: $(go.LayeredDigraphLayout, {
+      direction: 0,
+      layerSpacing: 200,
+      columnSpacing: 100
+    })
+  });
+
+  function nodeStyle() {
+    return [
+      new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+      { locationSpot: go.Spot.Center }
+    ];
+  }
+
+  function textStyle() {
+    return { font: "bold 12pt sans-serif", stroke: "black" };
+  }
+
+  myDiagram.nodeTemplateMap.add("Stock",
+    $(go.Node, "Auto", nodeStyle(),
+      $(go.Shape, "Rectangle",
+        { fill: "white", stroke: "black", strokeWidth: 2, width: 180, height: 80 },
+        { portId: "", fromLinkable: true, toLinkable: true, cursor: "pointer" }),
+      $(go.TextBlock, textStyle(),
+        { margin: 8, maxSize: new go.Size(160, NaN), wrap: go.TextBlock.WrapFit, textAlign: "center" },
+        new go.Binding("text").makeTwoWay())
+    )
+  );
+
+  myDiagram.nodeTemplateMap.add("Variable",
+    $(go.Node, "Auto", nodeStyle(),
+      $(go.Shape, "Circle",
+        { fill: "lightgray", stroke: "black", strokeWidth: 2, width: 100, height: 100 },
+        { portId: "", fromLinkable: true, toLinkable: true, cursor: "pointer" }),
+      $(go.TextBlock, textStyle(),
+        { margin: 8, maxSize: new go.Size(80, NaN), wrap: go.TextBlock.WrapFit, textAlign: "center" },
+        new go.Binding("text").makeTwoWay())
+    )
+  );
+
+  myDiagram.linkTemplateMap.add("Flow",
+    $(go.Link,
+      { curve: go.Link.Bezier, curviness: 20 },
+      $(go.Shape, { stroke: "blue", strokeWidth: 2 }),
+      $(go.Shape, { toArrow: "Standard", stroke: null, fill: "blue" })
+    )
+  );
+
+  myDiagram.linkTemplateMap.add("Influence",
+    $(go.Link,
+      { curve: go.Link.Bezier, curviness: 20 },
+      $(go.Shape, { stroke: "green", strokeWidth: 1, strokeDashArray: [3, 3] }),
+      $(go.Shape, { toArrow: "OpenTriangle", stroke: "green", fill: null })
+    )
+  );
+
+  var nodeDataArray = [
+    { key: "TAM", text: "TAM Success Factors", category: "Stock", loc: "0 0" },
+    { key: "Traits", text: "Miguel/Adam Traits", category: "Stock", loc: "400 -150" },
+    { key: "AWC", text: "AWC Contributions", category: "Stock", loc: "400 150" },
+    { key: "Customer", text: "Customer-Centric Strategies", category: "Stock", loc: "800 -150" },
+    { key: "Partner", text: "Technology Partner Engagement", category: "Stock", loc: "800 150" },
+    { key: "Personable", text: "Personable", category: "Variable", loc: "200 -200" },
+    { key: "Technical", text: "Technical Expertise", category: "Variable", loc: "200 -100" },
+    { key: "Rebate", text: "Rebate Management", category: "Variable", loc: "200 100" },
+    { key: "Margin", text: "Margin Maximization", category: "Variable", loc: "200 200" },
+    { key: "ProductFit", text: "Product-Application Fit", category: "Variable", loc: "600 -200" },
+    { key: "Support", text: "Technical Support", category: "Variable", loc: "600 -100" },
+    { key: "Advocacy", text: "Product Advocacy", category: "Variable", loc: "600 100" },
+    { key: "Engagement", text: "Consistent Engagement", category: "Variable", loc: "600 200" }
+  ];
+
+  var linkDataArray = [
+    { from: "TAM", to: "Traits", category: "Flow" },
+    { from: "TAM", to: "AWC", category: "Flow" },
+    { from: "Traits", to: "Customer", category: "Flow" },
+    { from: "AWC", to: "Partner", category: "Flow" },
+    { from: "Personable", to: "Traits", category: "Influence" },
+    { from: "Technical", to: "Traits", category: "Influence" },
+    { from: "Rebate", to: "AWC", category: "Influence" },
+    { from: "Margin", to: "AWC", category: "Influence" },
+    { from: "ProductFit", to: "Customer", category: "Influence" },
+    { from: "Support", to: "Customer", category: "Influence" },
+    { from: "Advocacy", to: "Partner", category: "Influence" },
+    { from: "Engagement", to: "Partner", category: "Influence" }
+  ];
+
+  myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+}
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</head>
+<body>
+<div id="sample">
+  <div id="myDiagramDiv" style="background-color: white; border: solid 1px black; width: 100%; height: 800px"></div>
+  <p>This System Dynamics diagram shows the key success factors for Target Account Managers (TAMs) at AWC, based on Miguel and Adam's experiences.</p>
+</div>
+</body>
+</html>

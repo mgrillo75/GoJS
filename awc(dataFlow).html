@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover"/>
+  <script src="https://unpkg.com/gojs/release/go.js"></script>
+  <script id="code">
+    function init() {
+      const $ = go.GraphObject.make;
+
+      myDiagram = new go.Diagram("myDiagramDiv", {
+        "undoManager.isEnabled": true,
+        layout: $(go.LayeredDigraphLayout, {
+          direction: 0,
+          layerSpacing: 100,
+          columnSpacing: 50
+        })
+      });
+
+      function nodeStyle() {
+        return [
+          new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+          { locationSpot: go.Spot.Center }
+        ];
+      }
+
+      function textStyle() {
+        return { font: "bold 11pt sans-serif", stroke: "white", wrap: go.TextBlock.WrapFit, textAlign: "center" };
+      }
+
+      myDiagram.nodeTemplateMap.add("TAM",
+        $(go.Node, "Auto", nodeStyle(),
+          $(go.Shape, "RoundedRectangle", { fill: "#4CAF50", stroke: null }),
+          $(go.TextBlock, textStyle(),
+            { margin: 8, maxSize: new go.Size(160, NaN) },
+            new go.Binding("text"))
+        )
+      );
+
+      myDiagram.nodeTemplateMap.add("Trait",
+        $(go.Node, "Auto", nodeStyle(),
+          $(go.Shape, "RoundedRectangle", { fill: "#2196F3", stroke: null }),
+          $(go.TextBlock, textStyle(),
+            { margin: 8, maxSize: new go.Size(160, NaN) },
+            new go.Binding("text"))
+        )
+      );
+
+      myDiagram.nodeTemplateMap.add("AWC",
+        $(go.Node, "Auto", nodeStyle(),
+          $(go.Shape, "RoundedRectangle", { fill: "#FFC107", stroke: null }),
+          $(go.TextBlock, textStyle(),
+            { margin: 8, maxSize: new go.Size(160, NaN) },
+            new go.Binding("text"))
+        )
+      );
+
+      myDiagram.nodeTemplateMap.add("Customer",
+        $(go.Node, "Auto", nodeStyle(),
+          $(go.Shape, "RoundedRectangle", { fill: "#9C27B0", stroke: null }),
+          $(go.TextBlock, textStyle(),
+            { margin: 8, maxSize: new go.Size(160, NaN) },
+            new go.Binding("text"))
+        )
+      );
+
+      myDiagram.nodeTemplateMap.add("Partner",
+        $(go.Node, "Auto", nodeStyle(),
+          $(go.Shape, "RoundedRectangle", { fill: "#FF5722", stroke: null }),
+          $(go.TextBlock, textStyle(),
+            { margin: 8, maxSize: new go.Size(160, NaN) },
+            new go.Binding("text"))
+        )
+      );
+
+      myDiagram.linkTemplate =
+        $(go.Link,
+          { routing: go.Link.AvoidsNodes, corner: 5 },
+          $(go.Shape, { strokeWidth: 2, stroke: "#555" }),
+          $(go.Shape, { toArrow: "Standard", stroke: null, fill: "#555" })
+        );
+
+      var nodeDataArray = [
+        { key: 1, text: "TAM Success Factors", category: "TAM" },
+        { key: 2, text: "Personable & Approachable", category: "Trait" },
+        { key: 3, text: "Technical Expertise", category: "Trait" },
+        { key: 4, text: "Rebate Management", category: "AWC" },
+        { key: 5, text: "Margin Maximization", category: "AWC" },
+        { key: 6, text: "Product-Application Fit", category: "Customer" },
+        { key: 7, text: "Technical Support", category: "Customer" },
+        { key: 8, text: "Product Advocacy", category: "Partner" },
+        { key: 9, text: "Joint Customer Visits", category: "Partner" }
+      ];
+
+      var linkDataArray = [
+        { from: 1, to: 2 },
+        { from: 1, to: 3 },
+        { from: 1, to: 4 },
+        { from: 1, to: 5 },
+        { from: 1, to: 6 },
+        { from: 1, to: 7 },
+        { from: 1, to: 8 },
+        { from: 1, to: 9 }
+      ];
+
+      myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</head>
+<body>
+  <div id="myDiagramDiv" style="width: 100%; height: 600px; background-color: #ffffff;"></div>
+</body>
+</html>
